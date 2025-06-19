@@ -3,6 +3,18 @@ const { pingCheck } = require('../../controllers/ping-controller');
 
 const router = express.Router()
 
-router.get('/', pingCheck);
+
+function authCheck(req, res, next) {
+    console.log('Hello from auth');
+
+    next()
+}
+
+function logCheck(req, res, next) {
+    console.log('Hello from log');
+
+    next()
+}
+router.get('/', authCheck, logCheck, pingCheck);
 
 module.exports = router
