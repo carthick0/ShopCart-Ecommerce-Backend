@@ -10,6 +10,23 @@ class FakeStoreRepository {
             console.log(error)
         }
     }
+
+    async getProduct(id) {
+        try {
+            const response = await axios.get('https://fakestoreapi.com/products/' + id);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async createProduct(product) {
+        try {
+            const response = await axios.post('https://fakestoreapi.com/products/', product);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    }
 }
 
 

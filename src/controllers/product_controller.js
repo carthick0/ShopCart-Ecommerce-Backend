@@ -5,10 +5,10 @@ const FakeStoreRepository = require('../repositories/fake_store_repository');
 
 const productService = new ProductService(new FakeStoreRepository())
 
-function createProduct(req, res) {
+async function createProduct(req, res) {
 
     try {
-        const response = productService.createProduct(req.body)
+        const response = await productService.createProduct(req.body)
         return res
             .status(StatusCodes.CREATED)
             .json({
@@ -38,9 +38,9 @@ async function getProducts(req, res) {
     }
 }
 
-function getProduct(req, res) {
+async function getProduct(req, res) {
     try {
-        const response = productService.getProduct(req.params.id);
+        const response = await productService.getProduct(req.params.id);
         return res
             .status(StatusCodes.OK)
             .json({
