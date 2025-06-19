@@ -1,6 +1,6 @@
 const express = require('express');
-const serverConfig = require('./config/server-config');
-const ApiRouter = require('./routes/api-routes')
+const serverConfig = require('./config/server_config');
+const ApiRouter = require('./routes/api_routes')
 const bodyParser = require("body-parser")
 
 const app = express();
