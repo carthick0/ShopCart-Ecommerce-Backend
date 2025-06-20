@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/db_config');
-
+const bcrypt = require('bcrypt')
 const User = db.define('user', {
     email: {
         type: Sequelize.STRING,
@@ -23,6 +23,12 @@ const User = db.define('user', {
             isAlphanumeric: {
                 msg: 'Password must contain only letters and numbers'
             }
+        }
+    }
+}, {
+    hooks: {
+        beforeCreate: function(user) {
+            user.password = bcrypt.hashSync(user.password, 10)
         }
     }
 });
