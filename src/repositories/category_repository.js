@@ -2,7 +2,7 @@ const Category = require('../models/category')
 class CategoryRepository {
     async getCategories() {
         try {
-            const response = await Category.findall()
+            const response = await Category.findAll()
             return response;
         } catch (error) {
             console.log(error)

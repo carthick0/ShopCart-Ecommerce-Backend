@@ -21,37 +21,40 @@ async function createCategory(req, res) {
 }
 
 
-// async function getProducts(req, res) {
-//     try {
-//         const response = await productService.getProducts(req.body);
+async function getCategories(req, res) {
+    try {
+        const response = await productService.getCategories(req.body);
 
-//         return res
-//             .status(StatusCodes.OK)
-//             .json({
-//                 success: true,
-//                 message: 'Successfully displaying products',
-//                 data: response
-//             })
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+        return res
+            .status(StatusCodes.OK)
+            .json({
+                success: true,
+                message: 'Successfully displaying categories',
+                data: response
+            })
+    } catch (error) {
+        console.log(error)
+    }
+}
 
-// async function getProduct(req, res) {
-//     try {
-//         const response = await productService.getProduct(req.params.id);
-//         return res
-//             .status(StatusCodes.OK)
-//             .json({
-//                 success: true,
-//                 message: 'Successfully fetched product',
-//                 data: response
-//             })
-//     } catch (error) {
+async function getCategory(req, res) {
+    try {
+        const response = await productService.getCategory(req.params.id);
+        return res
+            .status(StatusCodes.OK)
+            .json({
+                success: true,
+                message: 'Successfully fetched category',
+                data: response
+            })
+    } catch (error) {
 
-//     }
-// }
+    }
+}
 module.exports = {
     createCategory,
+    getCategories,
+    getCategory
+
 
 }

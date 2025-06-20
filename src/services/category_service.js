@@ -16,7 +16,7 @@ class CategoryService {
 
     async getCategory(id) {
         const response = await this.repository.getCategory(id)
-        return response
+        return response;
     }
 
 }
