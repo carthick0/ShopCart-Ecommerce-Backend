@@ -1,9 +1,10 @@
+const { where } = require('sequelize');
 const { Product } = require('../models/index');
 
 class ProductRepository {
-    async getProducts() {
+    async getProducts(limit, offset) {
         try {
-            return await Product.findAll();
+            return await Product.findAll({ limit, offset });
         } catch (error) {
             console.log(error);
         }
@@ -31,6 +32,19 @@ class ProductRepository {
             return await Product.destroy({ where: { id } });
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    async getProductsForCategory(categoryId) {
+        try {
+            const response = await Product.findAll({
+                where: {
+                    categoryId: categoryId
+                }
+            });
+            return response;
+        } catch (error) {
+            console.log(error)
         }
     }
 }

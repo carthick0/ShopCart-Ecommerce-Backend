@@ -12,8 +12,8 @@ class ProductService {
     }
 
 
-    async getProducts() {
-        const response = await this.repository.getProducts();
+    async getProducts(query) {
+        const response = await this.repository.getProducts(+query.limit, +query.offset);
         return response;
     }
 
@@ -24,6 +24,7 @@ class ProductService {
     async deleteProduct(id) {
         const response = await this.repository.deleteProduct(id);
     }
+
 
 }
 

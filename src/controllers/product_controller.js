@@ -24,7 +24,7 @@ async function createProduct(req, res) {
 
 async function getProducts(req, res) {
     try {
-        const response = await productService.getProducts(req.body);
+        const response = await productService.getProducts(req.query);
 
         return res
             .status(StatusCodes.OK)
@@ -51,9 +51,26 @@ async function getProduct(req, res) {
     } catch (error) {
 
     }
+};
+
+async function deleteProduct(req, res) {
+
+    try {
+        const response = await productService.deleteProduct(req.params.id);
+        return res
+            .status(StatusCodes.OK)
+            .json({
+                success: true,
+                message: 'Successfully deleted product',
+                data: response
+            })
+    } catch (error) {
+
+    }
 }
 module.exports = {
     createProduct,
     getProduct,
-    getProducts
+    getProducts,
+    deleteProduct
 }

@@ -2,8 +2,12 @@ const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const CategoryService = require('../services/category_service');
 const CategoryRepository = require('../repositories/category_repository');
 const errorResponse = require('../utlis/error_response');
+const ProductRepository = require('../repositories/product_repository');
 
-const categoryService = new CategoryService(new CategoryRepository())
+const categoryService = new CategoryService(new CategoryRepository(), new ProductRepository())
+
+
+
 
 async function createCategory(req, res) {
 
@@ -14,6 +18,22 @@ async function createCategory(req, res) {
             .json({
                 success: true,
                 message: 'Successfully created Category',
+                data: response
+            })
+    } catch (error) {
+        console.log("Category Controller: Something went wrong", error);
+        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
+    }
+}
+
+async function getProductsForCategory(req, res) {
+    try {
+        const response = await categoryService.getProductsForCategory(req.params.id);
+        return res
+            .status(StatusCodes.OK)
+            .json({
+                success: true,
+                message: 'Successfully fetched products that belongs to requested category',
                 data: response
             })
     } catch (error) {
@@ -75,5 +95,6 @@ module.exports = {
     createCategory,
     getCategories,
     getCategory,
-    deleteCategory
+    deleteCategory,
+    getProductsForCategory
 }
