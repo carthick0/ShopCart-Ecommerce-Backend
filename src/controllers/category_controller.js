@@ -1,6 +1,7 @@
-const { StatusCodes } = require('http-status-codes');
+const { StatusCodes, ReasonPhrases } = require('http-status-codes');
 const CategoryService = require('../services/category_service');
 const CategoryRepository = require('../repositories/category_repository');
+const errorResponse = require('../utlis/error_response');
 
 const categoryService = new CategoryService(new CategoryRepository())
 
@@ -16,7 +17,8 @@ async function createCategory(req, res) {
                 data: response
             })
     } catch (error) {
-        console.log(error);
+        console.log("Category Controller: Something went wrong", error);
+        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
     }
 }
 
@@ -33,7 +35,8 @@ async function getCategories(req, res) {
                 data: response
             })
     } catch (error) {
-        console.log(error)
+        console.log("Category Controller: Something went wrong", error);
+        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
     }
 }
 
@@ -48,7 +51,8 @@ async function getCategory(req, res) {
                 data: response
             })
     } catch (error) {
-        console.log(error)
+        console.log("Category Controller: Something went wrong", error);
+        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
     }
 }
 
@@ -63,7 +67,8 @@ async function deleteCategory(req, res) {
                 data: response
             })
     } catch (error) {
-        console.log(error)
+        console.log("Category Controller: Something went wrong", error);
+        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
     }
 }
 module.exports = {
