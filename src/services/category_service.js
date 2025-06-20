@@ -18,6 +18,10 @@ class CategoryService {
         const response = await this.repository.getCategory(id)
         return response;
     }
+    async deleteCategory(id) {
+        const response = await this.repository.deleteCategory(id);
+        return response;
+    }
 
 }
 

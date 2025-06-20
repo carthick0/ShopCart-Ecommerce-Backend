@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const Category = require('../models/category')
 class CategoryRepository {
     async getCategories() {
@@ -23,6 +24,17 @@ class CategoryRepository {
             return response;
         } catch (error) {
             console.log(error)
+        }
+    }
+    async deleteCategory(catId) {
+        try {
+            const res = await Category.destroy({
+                where: {
+                    id: catId
+                }
+            })
+        } catch (error) {
+
         }
     }
 }

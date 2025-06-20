@@ -2,12 +2,12 @@ const { StatusCodes } = require('http-status-codes');
 const CategoryService = require('../services/category_service');
 const CategoryRepository = require('../repositories/category_repository');
 
-const productService = new CategoryService(new CategoryRepository())
+const categoryService = new CategoryService(new CategoryRepository())
 
 async function createCategory(req, res) {
 
     try {
-        const response = await productService.createCategory(req.body)
+        const response = await categoryService.createCategory(req.body)
         return res
             .status(StatusCodes.CREATED)
             .json({
@@ -23,7 +23,7 @@ async function createCategory(req, res) {
 
 async function getCategories(req, res) {
     try {
-        const response = await productService.getCategories(req.body);
+        const response = await categoryService.getCategories(req.body);
 
         return res
             .status(StatusCodes.OK)
@@ -39,7 +39,7 @@ async function getCategories(req, res) {
 
 async function getCategory(req, res) {
     try {
-        const response = await productService.getCategory(req.params.id);
+        const response = await categoryService.getCategory(req.params.id);
         return res
             .status(StatusCodes.OK)
             .json({
@@ -48,13 +48,27 @@ async function getCategory(req, res) {
                 data: response
             })
     } catch (error) {
+        console.log(error)
+    }
+}
 
+async function deleteCategory(req, res) {
+    try {
+        const response = await categoryService.deleteCategory(req.params.id);
+        return res.
+        status(StatusCodes.OK)
+            .json({
+                success: true,
+                message: 'Successfully delgeted category',
+                data: response
+            })
+    } catch (error) {
+        console.log(error)
     }
 }
 module.exports = {
     createCategory,
     getCategories,
-    getCategory
-
-
+    getCategory,
+    deleteCategory
 }
