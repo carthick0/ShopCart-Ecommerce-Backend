@@ -19,7 +19,15 @@ class UserService {
             if (error.name === "SequelizeUniqueConstraintError") {
                 throw new ConflictError("User", error.errors[0].message);
             }
-
+            if (error.name === "SequelizeValidationError") {
+                let propertiesHavingValidation = "";
+                let reason = [];
+                error.errors.forEach((err) => {
+                    propertiesHavingValidation += err.path + ", ";
+                    reason.push(err.message)
+                });
+                throw new BadRequest(propertiesHavingValidation, true, reason)
+            }
             console.log("UserService createUser error:", error);
             throw new InternalServerError();
         }
