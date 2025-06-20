@@ -2,14 +2,8 @@ const express = require('express');
 const serverConfig = require('./config/server_config');
 const ApiRouter = require('./routes/api_routes')
 const bodyParser = require("body-parser")
-const mysql = require('mysql2');
-
-const db = mysql.createConnection({
-    host: serverConfig.DB_HOST,
-    user: serverConfig.DB_USER,
-    password: serverConfig.DB_PASSWORD,
-    database: serverConfig.DB_NAME
-})
+const db = require('./config/db_config');
+const Category = require('./models/category');
 
 
 const app = express();
@@ -23,23 +17,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api', ApiRouter);
 
 
-app.listen((serverConfig.PORT), () => {
+app.listen((serverConfig.PORT), async() => {
     console.log('Server for shop cart is up at port', serverConfig.PORT);
-
-    db.connect((err) => {
-        if (err) {
-            console.log("DB didn't connect");
-            console.log(err)
-        } else {
-            console.log("DB connected successfully")
-        };
-
-        db.query('Select * from products', (err, res) => {
-            if (err) {
-                console.log(err);
-            }
-            console.log(res)
-        })
+    await db.sync()
+    console.log('DB connected')
+    const res = await Category.create({
+        name: 'Electronics',
+        description: 'Category of Electronics products'
     });
-
+    console.log(res)
 })
