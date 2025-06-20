@@ -21,9 +21,9 @@ app.listen((serverConfig.PORT), async() => {
     console.log('Server for shop cart is up at port', serverConfig.PORT);
     await db.sync()
     console.log('DB connected')
-    const res = await Category.create({
-        name: 'Electronics',
-        description: 'Category of Electronics products'
-    });
-    console.log(res)
+        // const res = await Category.create({
+        //     name: 'Electronics',
+        //     description: 'Category of Electronics products'
+        // });
+        // console.log(res)
 })
