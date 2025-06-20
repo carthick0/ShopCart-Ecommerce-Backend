@@ -1,5 +1,5 @@
 const { where } = require('sequelize');
-const Category = require('../models/category')
+const { Category } = require('../models/index')
 class CategoryRepository {
     async getCategories() {
         try {
