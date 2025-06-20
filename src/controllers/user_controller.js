@@ -72,9 +72,38 @@ async function deleteUser(req, res) {
     }
 };
 
+async function signInUser(req, res) {
+    try {
+        const response = await userService.signInUser(req.body);
+
+        if (!response) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password',
+                data: null
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Successfully logged in User',
+            data: response
+        });
+
+    } catch (error) {
+        console.log("Controller signInUser error:", error);
+        return res.status(error.statusCode || 500).json({
+            success: false,
+            message: error.errorMsg || "Something went wrong",
+            data: null
+        });
+    }
+}
+
 module.exports = {
     createUser,
     getAllUsers,
     getUser,
-    deleteUser
+    deleteUser,
+    signInUser
 }

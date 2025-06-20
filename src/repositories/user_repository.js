@@ -19,6 +19,18 @@ class UserRepository {
             where: { id }
         });
     }
+    async getUserByEmail(email) {
+        try {
+            return await User.findOne({
+                where: {
+                    email: email
+                }
+            })
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
 }
 
 module.exports = UserRepository;

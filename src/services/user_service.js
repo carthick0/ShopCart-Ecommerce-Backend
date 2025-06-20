@@ -1,7 +1,7 @@
-const BadRequest = require("../errors/bad_request_error");
-const InternalServerError = require("../errors/internal_server_error"); // Make sure this exists
+const InternalServerError = require("../errors/internal_server_error");
 const ConflictError = require("../errors/conflict_error");
 const NotFoundError = require("../errors/not_found_error");
+const bcrypt = require('bcrypt');
 
 class UserService {
     constructor(repository) {
@@ -10,8 +10,6 @@ class UserService {
 
     async createUser(data) {
         try {
-            if (!data.email) throw new BadRequest("email");
-            if (!data.password) throw new BadRequest("password");
 
             const response = await this.repository.createUser(data);
             return response;
@@ -19,15 +17,11 @@ class UserService {
             if (error.name === "SequelizeUniqueConstraintError") {
                 throw new ConflictError("User", error.errors[0].message);
             }
+
             if (error.name === "SequelizeValidationError") {
-                let propertiesHavingValidation = "";
-                let reason = [];
-                error.errors.forEach((err) => {
-                    propertiesHavingValidation += err.path + ", ";
-                    reason.push(err.message)
-                });
-                throw new BadRequest(propertiesHavingValidation, true, reason)
+                throw new InternalServerError(); // Skip custom BadRequest for now
             }
+
             console.log("UserService createUser error:", error);
             throw new InternalServerError();
         }
@@ -35,8 +29,7 @@ class UserService {
 
     async getAllUsers() {
         try {
-            const response = await this.repository.getAllUsers();
-            return response;
+            return await this.repository.getAllUsers();
         } catch (error) {
             console.log("UserService getAllUsers error:", error);
             throw new InternalServerError();
@@ -51,9 +44,7 @@ class UserService {
             }
             return response;
         } catch (error) {
-            if (error.name === "NotFoundError") {
-                throw error;
-            }
+            if (error.name === "NotFoundError") throw error;
             console.log("UserService getUser error:", error);
             throw new InternalServerError();
         }
@@ -61,13 +52,46 @@ class UserService {
 
     async deleteUser(id) {
         try {
-            const response = await this.repository.deleteUser(id);
-            return response;
+            return await this.repository.deleteUser(id);
         } catch (error) {
             console.log("UserService deleteUser error:", error);
             throw new InternalServerError();
         }
     }
+
+    async signInUser(data) {
+        try {
+            if (!data.email) {
+                console.log("Missing email");
+                return null;
+            }
+            if (!data.password) {
+                console.log("Missing password");
+                return null;
+            }
+
+            const user = await this.repository.getUserByEmail(data.email);
+
+            if (!user) {
+                console.log("User not found with email:", data.email);
+                return null; // or throw custom NotFoundError
+            }
+
+            const doesPasswordMatch = bcrypt.compareSync(data.password, user.password);
+
+            if (!doesPasswordMatch) {
+                console.log("Password mismatch");
+                return null; // or throw custom BadRequest
+            }
+
+            return user;
+
+        } catch (error) {
+            console.log("UserService signInUser error:", error);
+            throw new InternalServerError(); // keep this to wrap unknown issues
+        }
+    }
+
 }
 
 module.exports = UserService;
