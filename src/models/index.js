@@ -1,3 +1,4 @@
+const Cart = require('./cart');
 const Category = require('./category');
 const Product = require('./product');
 const User = require('./user');
@@ -9,5 +10,6 @@ Product.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
 module.exports = {
     Category,
     Product,
-    User
+    User,
+    Cart
 };

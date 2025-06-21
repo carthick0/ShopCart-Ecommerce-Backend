@@ -5,14 +5,16 @@ const bcrypt = require('bcrypt');
 const { generateJWT } = require("../utlis/auth");
 
 class UserService {
-    constructor(repository) {
+    constructor(repository, cartRepository) {
         this.repository = repository;
+        this.cartRepository = cartRepository
     }
 
     async createUser(data) {
         try {
 
             const response = await this.repository.createUser(data);
+            await this.cartRepository.createCart(response.id);
             return response;
         } catch (error) {
             if (error.name === "SequelizeUniqueConstraintError") {
