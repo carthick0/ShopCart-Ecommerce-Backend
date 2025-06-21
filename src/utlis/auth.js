@@ -6,7 +6,12 @@ function generateJWT(payload) {
 }
 
 function verifyToken(token) {
-    return jwt.verify(token, JWT_SEC)
+    try {
+        return jwt.verify(token, JWT_SEC)
+    } catch (error) {
+        throw error;
+    }
+
 }
 
 module.exports = {

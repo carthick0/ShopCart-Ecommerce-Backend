@@ -1,5 +1,6 @@
 const express = require('express');
-const { pingCheck } = require('../../controllers/ping_controller');
+const { pingCheck, pingAuthCheck } = require('../../controllers/ping_controller');
+const { isLoggedIn } = require('../../middlewares/auth_middleware');
 
 const router = express.Router()
 
@@ -18,5 +19,6 @@ const router = express.Router()
 
 
 router.get('/', pingCheck);
+router.get('/authping', isLoggedIn, pingAuthCheck)
 
 module.exports = router

@@ -4,6 +4,12 @@ function pingCheck(req, res) {
     })
 }
 
+function pingAuthCheck(req, res) {
+    return res.json({
+        message: "Alive "
+    })
+}
+
 function pingCheckV2(req, res) {
     return res.json({
         message: "Alive from v2"
@@ -13,5 +19,6 @@ function pingCheckV2(req, res) {
 
 module.exports = {
     pingCheck,
-    pingCheckV2
+    pingCheckV2,
+    pingAuthCheck
 }
