@@ -2,6 +2,7 @@ const { StatusCodes, ReasonPhrases } = require("http-status-codes");
 const UserRepository = require("../repositories/user_repository");
 const UserService = require("../services/user_service");
 const errorResponse = require("../utlis/error_response");
+const { NODE_ENV } = require("../config/server_config");
 
 const userService = new UserService(new UserRepository());
 
@@ -75,7 +76,11 @@ async function deleteUser(req, res) {
 async function signInUser(req, res) {
     try {
         const response = await userService.signInUser(req.body);
-
+        res.cookie('token', response, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            secure: NODE_ENV === 'production'
+        })
         if (!response) {
             return res.status(401).json({
                 success: false,
@@ -87,7 +92,7 @@ async function signInUser(req, res) {
         return res.status(200).json({
             success: true,
             message: 'Successfully logged in User',
-            data: response
+            data: (NODE_ENV == 'production') ? true : response
         });
 
     } catch (error) {

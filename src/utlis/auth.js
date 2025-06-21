@@ -5,6 +5,11 @@ function generateJWT(payload) {
     return jwt.sign(payload, JWT_SEC, { expiresIn: '1h' })
 }
 
+function verifyToken(token) {
+    return jwt.verify(token, JWT_SEC)
+}
+
 module.exports = {
-    generateJWT
+    generateJWT,
+    verifyToken
 }
