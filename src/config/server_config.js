@@ -9,5 +9,6 @@ module.exports = {
     DB_NAME: process.env.DB_NAME,
     DB_HOST: process.env.DB_HOST,
     DB_ALTER: process.env.DB_ALTER,
-    DB_FORCE: process.env.DB_FORCE
+    DB_FORCE: process.env.DB_FORCE,
+    JWT_SEC: process.env.JWT_SEC
 }

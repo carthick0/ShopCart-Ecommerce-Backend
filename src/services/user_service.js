@@ -2,6 +2,7 @@ const InternalServerError = require("../errors/internal_server_error");
 const ConflictError = require("../errors/conflict_error");
 const NotFoundError = require("../errors/not_found_error");
 const bcrypt = require('bcrypt');
+const { generateJWT } = require("../utlis/auth");
 
 class UserService {
     constructor(repository) {
@@ -74,17 +75,17 @@ class UserService {
 
             if (!user) {
                 console.log("User not found with email:", data.email);
-                return null; // or throw custom NotFoundError
+                return null;
             }
 
             const doesPasswordMatch = bcrypt.compareSync(data.password, user.password);
 
             if (!doesPasswordMatch) {
                 console.log("Password mismatch");
-                return null; // or throw custom BadRequest
+                return null;
             }
+            return generateJWT({ email: user.email, id: user.id })
 
-            return user;
 
         } catch (error) {
             console.log("UserService signInUser error:", error);
