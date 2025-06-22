@@ -3,7 +3,8 @@ const serverConfig = require('./config/server_config');
 const ApiRouter = require('./routes/api_routes');
 const bodyParser = require("body-parser");
 const db = require('./config/db_config');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
+const { Cart } = require('./models');
 const app = express();
 
 app.use(bodyParser.json());
@@ -22,5 +23,9 @@ app.listen(serverConfig.PORT, async() => {
     } else {
         await db.sync()
     }
+
+    const cart = await Cart.findByPk(1);
+    const products = await cart.getProducts();
+    console.log(products);
 
 });
