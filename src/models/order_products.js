@@ -7,7 +7,7 @@ const OrderProducts = db.define('order_products', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'Carts',
+            model: 'carts',
             key: 'id'
         }
     },
@@ -15,7 +15,7 @@ const OrderProducts = db.define('order_products', {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-            model: 'Products',
+            model: 'products',
             key: 'id'
         }
     },

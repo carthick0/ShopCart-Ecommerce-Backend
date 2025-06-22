@@ -1,3 +1,4 @@
+const { NODE_ENV } = require('../config/server_config');
 const Cart = require('./cart');
 const CartProducts = require('./cart_products');
 const Category = require('./category');
@@ -5,6 +6,18 @@ const Order = require('./order');
 const OrderProducts = require('./order_products');
 const Product = require('./product');
 const User = require('./user');
+
+
+async function syncDbInOrder() {
+    await Category.sync();
+    await Product.sync();
+    await User.sync();
+    await Cart.sync();
+    await Order.sync();
+    await CartProducts.sync()
+    await OrderProducts.sync()
+}
+
 
 
 Category.hasMany(Product, { foreignKey: 'categoryId' });
@@ -38,5 +51,6 @@ module.exports = {
     Cart,
     CartProducts,
     Order,
-    OrderProducts
+    OrderProducts,
+    syncDbInOrder
 };
