@@ -19,6 +19,33 @@ class CartRepository {
             console.log(error)
         }
     }
+    async getCartProducts(id) {
+        try {
+            const response = await CartProducts.findAll({
+                where: {
+                    cartId: id
+                }
+            });
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+    async clearCart(cartId) {
+        try {
+            const response = await CartProducts.destroy({
+                where: {
+                    cartId: cartId
+                }
+            });
+            return response;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     async createCart(userId) {
         try {
             const response = await Cart.create({
@@ -27,6 +54,7 @@ class CartRepository {
             return response;
         } catch (error) {
             console.log(error)
+            throw error;
         }
     }
     async deleteCategory(catId) {

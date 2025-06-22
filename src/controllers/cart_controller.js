@@ -22,11 +22,50 @@ async function updateCart(req, res) {
             })
     } catch (error) {
         console.log("Cart Controller: Something went wrong", error);
-        return res.status(error.statusCode).json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
     }
 }
 
+async function getCartProducts(req, res) {
+    try {
+        const response = await cartService.getCartProducts(req.params.id, req.user.id);
+        return res.status(StatusCodes.OK).json({
+            success: true,
+            message: 'Successfully fetched Cart Products',
+            data: response
+        });
+    } catch (error) {
+        console.log("Cart Controller: Something went wrong", error);
+        return res
+            .status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(errorResponse(error.message || ReasonPhrases.INTERNAL_SERVER_ERROR, error));
+    }
+}
+
+async function clearCart(req, res) {
+    try {
+        const response = await cartService.clearCart(req.params.id, req.user.id);
+
+        return res
+            .status(StatusCodes.OK)
+            .json({
+                sucess: true,
+                error: {},
+                message: "deleted Cart successfully",
+                data: response
+            });
+
+    } catch (error) {
+        console.log("CartController: Something went wrong", error);
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+
+        .json(errorResponse(error.reason, error));
+    }
+}
 module.exports = {
     updateCart,
+    getCartProducts,
+    clearCart
 
 }

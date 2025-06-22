@@ -8,4 +8,4 @@ function errorResponse(message, error) {
 };
 
 
-module.exports = errorResponse
+module.exports = errorResponse;
