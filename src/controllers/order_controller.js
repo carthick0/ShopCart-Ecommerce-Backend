@@ -28,8 +28,29 @@ async function createOrder(req, res) {
 }
 
 
+async function getOrder(req, res) {
+
+    try {
+
+        const response = await orderService.fetchOrderDetails(req.user.id, req.params.id)
+        return res
+            .status(StatusCodes.CREATED)
+            .json({
+                success: true,
+                message: 'Successfully fetched order details',
+                data: response
+            })
+    } catch (error) {
+        console.log("Order Controller: Something went wrong", error);
+        return res.status(error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR)
+            .json(errorResponse(ReasonPhrases.INTERNAL_SERVER_ERROR, error))
+    }
+}
+
+
+
 module.exports = {
     createOrder,
-
+    getOrder
 
 }

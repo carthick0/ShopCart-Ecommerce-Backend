@@ -1,5 +1,6 @@
 const InternalServerError = require("../errors/bad_request_error");
 const NotFoundError = require("../errors/not_found_error");
+const UnauthorizedError = require("../errors/unauthorized_error");
 
 class OrderService {
     constructor(repository, cartRepository) {
@@ -56,38 +57,40 @@ class OrderService {
 
     }
 
-    async getOrders() {
-
-        try {
-            const response = await this.repository.getOrders()
-            return response;
-        } catch (error) {
-            console.log("Order Service", error);
-            throw new InternalServerError();
+    async fetchOrderDetails(userId, orderId) {
+        const orderObject = await this.repository.getOrder(orderId);
+        if (!orderObject) {
+            throw new NotFoundError('Order', 'order id', orderId);
         }
-
-    }
-
-    async getOrder(id) {
-        try {
-            const response = await this.repository.getOrder(id);
-            if (!response) {
-                throw new NotFoundError("Category", "id", id)
-            }
-            return response;
-
-        } catch (error) {
-            if (error.name === "NotFoundError") {
-                throw error;
-            }
-            console.log("Order Service", error);
-            throw new InternalServerError();
+        if (orderObject.userId != userId) {
+            throw new UnauthorizedError('You are not authorised to do the current operation');
         }
-
+        const response = await this.repository.fetchOrderDetails(orderId);
+        const order = { id: response.id, status: response.status, createdAt: response.createdAt, updatedAt: response.updatedAt };
+        let totalOrderValue = 0;
+        order.products = response.products.map(product => {
+            totalOrderValue += product.price * product.order_products.quantity;
+            return {
+                title: product.title,
+                price: product.price,
+                image: product.image,
+                id: product.id,
+                quantity: product.order_products.quantity
+            }
+        });
+        order.totalOrderValue = totalOrderValue;
+        return order;
+    } catch (error) {
+        if (error.name === "NotFoundError" || error.name === "UnauthorizedError") {
+            throw error;
+        }
+        console.log("OrderService: ", error);
+        throw new InternalServerError();
     }
-
-
 }
+
+
+
 
 
 module.exports = OrderService;
